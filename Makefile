@@ -1,6 +1,6 @@
 TARGET = bin/main
 BIN_DIR = bin
-SOURCES = src/main.c src/file.c
+SOURCES = src/main.c src/file.c src/parse.c
 CC = gcc
 CFLAGS = -Iinclude -Wall -Wextra -std=c11
 
@@ -13,7 +13,7 @@ $(BIN_DIR):
 	mkdir -p $@
 
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) $(ARGS)
 
 clean:
 	rm -f $(TARGET)

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "../include/file.h"
+#include "../include/parse.h"
 
 void print_help(char *argv[]){
     printf("Usage: %s -n -f -d -h <database file>\n", argv[0]);
@@ -16,6 +17,7 @@ int main(int argc, char *argv[]){
     int c = 0;
     int db_fd = -1; // -1 to avoid uninitialized warning
     char *filepath = NULL;
+    struct header_t *header = NULL;
     bool newfile = false;
     bool deletefile = false;
 
@@ -73,6 +75,13 @@ int main(int argc, char *argv[]){
         }
 
         printf("File created successfully\n");
+
+        if (create_db_header(&header) == -1){
+            printf("Failed to create database header\n");
+            return 0;
+        }
+        printf("Database header created successfully\n");
+
         return 0;
     } else {
         db_fd = open_file(filepath);
