@@ -92,6 +92,12 @@ int main(int argc, char *argv[]){
         }
         
         printf("File opened successfully\n");
+
+        if (validate_db_header(db_fd, &header) == -1){
+            printf("Failed to validate database header\n");
+            return -1;
+        }
+
         return 0;
     }
 
