@@ -1,10 +1,16 @@
-TARGET = bin/*.o
-SOURCE = src/main.c
+TARGET = bin/main
+BIN_DIR = bin
+SOURCES = src/main.c src/file.c
+CC = gcc
+CFLAGS = -Iinclude -Wall -Wextra -std=c11
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCE)
-	gcc -o $@ $^
+$(TARGET): $(SOURCES) | $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(BIN_DIR):
+	mkdir -p $@
 
 run: $(TARGET)
 	./$(TARGET)

@@ -2,6 +2,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "../include/file.h"
 
 void print_help(char *argv[]){
     printf("Usage: %s -n -f -d -h <database file>\n", argv[0]);
@@ -13,6 +14,7 @@ void print_help(char *argv[]){
 
 int main(int argc, char *argv[]){
     int c = 0;
+    int db_fd = -1; // -1 to avoid uninitialized warning
     char *filepath = NULL;
     bool newfile = false;
     bool deletefile = false;
@@ -47,6 +49,40 @@ int main(int argc, char *argv[]){
         printf("User must provide file path\n");
         print_help(argv);
 
+        return 0;
+    }
+
+    if (deletefile){
+        db_fd = delete_file(filepath);
+
+        if (db_fd == -1){
+            printf("Failed to delete file\n");
+            return 0;
+        }
+
+        printf("File deleted successfully\n");
+        return 0;
+    }
+
+    if (newfile){
+        db_fd = create_file(filepath);
+
+        if (db_fd == -1){
+            printf("Failed to create file\n");
+            return 0;
+        }
+
+        printf("File created successfully\n");
+        return 0;
+    } else {
+        db_fd = open_file(filepath);
+
+        if (db_fd == -1){
+            printf("Failed to open file\n");
+            return 0;
+        }
+        
+        printf("File opened successfully\n");
         return 0;
     }
 
