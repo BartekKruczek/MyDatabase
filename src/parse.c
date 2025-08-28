@@ -72,3 +72,21 @@ int validate_db_header(int fd, struct header_t **header_out){
     
     return 0;
 }
+
+void output_to_db_file(int fd, struct header_t *header){
+    if (fd < 0){
+        perror("fd");
+        return;
+    }
+
+    header->magic = ntohl(header->magic);
+    header->version = ntohs(header->version);
+    header->count = ntohs(header->count);
+    header->file_size = ntohl(header->file_size);
+
+    lseek(fd, 0, SEEK_SET);
+
+    write(fd, header, sizeof(struct header_t));
+
+    return;
+}

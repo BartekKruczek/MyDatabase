@@ -101,5 +101,7 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
+    output_to_db_file(db_fd, header);
+
     return 0;
 }
