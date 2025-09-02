@@ -17,7 +17,9 @@ int main(int argc, char *argv[]){
     int c = 0;
     int db_fd = -1; // -1 to avoid uninitialized warning
     char *filepath = NULL;
+    char *addstring = NULL;
     struct header_t *header = NULL;
+    struct employee_t *employees = NULL;
     bool newfile = false;
     bool deletefile = false;
 
@@ -27,13 +29,16 @@ int main(int argc, char *argv[]){
     d -> delete file path 
     h -> print help
     */
-    while ((c = getopt(argc, argv, "ndhf:")) != -1){
+    while ((c = getopt(argc, argv, "ndhf:a:")) != -1){
         switch (c){
             case 'n':
                 newfile = true;
                 break;
             case 'f':
                 filepath = optarg;
+                break;
+            case 'a':
+                addstring = optarg;
                 break;
             case 'd':
                 deletefile = true;
@@ -81,14 +86,12 @@ int main(int argc, char *argv[]){
             return 0;
         }
         printf("Database header created successfully\n");
-
-        return 0;
     } else {
         db_fd = open_file(filepath);
 
         if (db_fd == -1){
             printf("Failed to open file\n");
-            return 0;
+            return -1;
         }
         
         printf("File opened successfully\n");
@@ -97,11 +100,20 @@ int main(int argc, char *argv[]){
             printf("Failed to validate database header\n");
             return -1;
         }
-
-        return 0;
     }
 
     output_to_db_file(db_fd, header);
+
+    if (read_employees(db_fd, header, &employees) == -1){
+        printf("Failed to read employees\n");
+        return -1;
+    }
+
+    // add new employee to db
+    if (add_employee(header, employees, addstring) == -1){
+        printf("Failed to add an employee\n");
+        return -1;
+    }
 
     return 0;
 }

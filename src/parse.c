@@ -69,8 +69,40 @@ int validate_db_header(int fd, struct header_t **header_out){
     }
 
     *header_out = header;
-    
-    return 0;
+}
+
+int add_employee(struct header_t *header, struct employee_t *employee, char *addstring){
+    if (addstring == NULL){
+        printf("Please provide employee data\n");
+    }
+
+    printf("%s\n", addstring);
+
+    return 0;   
+}
+
+int read_employees(int fd, struct header_t *header, struct employee_t **employees_out){
+    if (fd < 0){
+        perror("fd");
+        return -1;
+    }
+
+    int count = header->count;
+
+    struct employee_t *employees = calloc(count, sizeof(struct employee_t));
+    if (employees == NULL){
+        printf("Malloc failed\n");
+        return -1;
+    }
+
+    read(fd, employees, count*sizeof(struct employee_t));
+
+    int i = 0;
+    for (; i < count; i++){
+        employees[i].hours = ntohl(employees[i].hours);
+    }
+
+    *employees_out = employees;
 }
 
 void output_to_db_file(int fd, struct header_t *header){
