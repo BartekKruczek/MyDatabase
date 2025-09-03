@@ -23,7 +23,6 @@ int main(int argc, char *argv[]){
     struct dbheader_t *header = NULL;
     struct employee_t *employees = NULL;
     bool newfile = false;
-    bool deletefile = false;
     bool list = false;
 
     /*
@@ -42,9 +41,6 @@ int main(int argc, char *argv[]){
                 break;
             case 'a':
                 addstring = optarg;
-                break;
-            case 'd':
-                deletefile = true;
                 break;
             case 'l':
                 list = true;
@@ -65,18 +61,6 @@ int main(int argc, char *argv[]){
         printf("User must provide file path\n");
         print_help(argv);
 
-        return 0;
-    }
-
-    if (deletefile){
-        db_fd = delete_file(filepath);
-
-        if (db_fd == -1){
-            printf("Failed to delete file\n");
-            return 0;
-        }
-
-        printf("File deleted successfully\n");
         return 0;
     }
 

@@ -1,35 +1,31 @@
 # MyDatabase
-Database written in C, exercise purposes.
+
+This repository contains example how to create and update simple database in C language. It's been made for educational purposes.
 
 ## How to use
 
+User can communicate with database file through **make** statement with additional options:
+- `clean`; clean previously created binary files inside *bin* directory,
+- `run`; required with **make** statement every time used would like to interact with database.
+
+On top of that, after **make run** option, there are possible following flags:
+- `n`; single use flag to create new database file,
+- `f`;(required) filepath to desired database file either to create new one or interact with existing,
+- `a`; append new employee to database with following syntax: *Name;Address;Hours worked*,
+- `l`; list all correctly added employees with their id, name, address and worked hours accordingly,
+- `u`; update worked hours existing employee passing following syntax: *Name;Address;New hours*,
+- `h`; print help.
+
+## Examples
+
 To clean the project, run:
-```
+```bash
 make clean
 ```
 
-To build the project and create new file, run:
-```
-make run ARGS="-n -f mydbfile.db"
-```
-
-To open existing file, run:
-```
-make run ARGS="-f mydbfile.db"
+To build the project, create new file, append and list employees:
+```bash
+make run ARGS="-n -f mydbfile.db -a "Jan Kowalski;Warszawa;10" -l"
 ```
 
-To delete existing file, run:
-```
-make run ARGS="-d -f mydbfile.db"
-```
-
-In order to add an employee, one has to provide valid string structure after -a flag, e.g.:
-```
--a "Jan Kowalski;Warszawa;10"
-```
-Notice that delimeter is semicolon without spaces before and after it.
-
-To list all employees pass -l flag:
-```
--a "Jan Kowalski;Warszawa;10" -l
-```
+To open and interact with exisitng database just skipp `-n` flag.
