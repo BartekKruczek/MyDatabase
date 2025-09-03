@@ -28,3 +28,8 @@ In order to add an employee, one has to provide valid string structure after -a 
 -a "Jan Kowalski;Warszawa;10"
 ```
 Notice that delimeter is semicolon without spaces before and after it.
+
+To list all employees pass -l flag:
+```
+-a "Jan Kowalski;Warszawa;10" -l
+```

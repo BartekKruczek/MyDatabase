@@ -16,9 +16,9 @@ int create_db_header(struct dbheader_t **header_out){
     }
 
     header->magic = HEADER_MAGIC;
-    header->version = 1;
+    header->version = 0x1;
     header->count = 0;
-    header->file_size = 0;
+    header->file_size = sizeof(struct dbheader_t);
 
     *header_out = header;
 
@@ -90,7 +90,7 @@ int add_employee(struct dbheader_t *header, struct employee_t *employee, char *a
     strncpy(employee[header->count-1].name, name, sizeof(employee[header->count-1].name));
     strncpy(employee[header->count-1].address, address, sizeof(employee[header->count-1].address));
 
-    employee[header->count-1].hours = htonl(atoi(hours));
+    employee[header->count-1].hours = atoi(hours);
     printf("Employee added successfully\n");
     
 }
@@ -137,7 +137,24 @@ int output_file(int fd, struct dbheader_t *header, struct employee_t *employees)
     write(fd, header, sizeof(struct dbheader_t));
 
     for (int i = 0; i < realcount; i++){
-        write(fd, &employees[i].hours, sizeof(struct employee_t));
+        employees[i].hours = htonl(employees[i].hours);
+        write(fd, &employees[i], sizeof(struct employee_t));
     }
     printf("File written successfully\n");
+}
+
+int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
+    if (dbhdr == NULL || employees == NULL){
+        printf("Invalid dbheader or employees pointer\n");
+        return -1;
+    }
+
+    for (int i = 0; i < dbhdr->count; i++){
+        printf("Employee: %d\n", i);
+        printf("\tName: %s\n", employees[i].name);
+        printf("\tAddress: %s\n", employees[i].address);
+        printf("\tHours: %d\n", employees[i].hours);
+    }
+
+    printf("Successfully listed all databse employees");
 }

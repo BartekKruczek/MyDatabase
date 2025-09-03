@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
     struct employee_t *employees = NULL;
     bool newfile = false;
     bool deletefile = false;
+    bool list = false;
 
     /*
     n -> newfile name
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]){
     d -> delete file path 
     h -> print help
     */
-    while ((c = getopt(argc, argv, "ndhf:a:")) != -1){
+    while ((c = getopt(argc, argv, "ndhf:a:l")) != -1){
         switch (c){
             case 'n':
                 newfile = true;
@@ -43,6 +44,9 @@ int main(int argc, char *argv[]){
                 break;
             case 'd':
                 deletefile = true;
+                break;
+            case 'l':
+                list = true;
                 break;
             case 'h':
                 print_help(argv);
@@ -118,6 +122,14 @@ int main(int argc, char *argv[]){
         add_employee(header, employees, addstring);
     }
 
+    if (list){
+        if (list_employees(header, employees) == -1){
+            printf("Failed to list databse employees");
+            return -1;
+        }
+    }
+
+    // has to be at the end of main, DO NOT put enything after it
     output_file(db_fd, header, employees);
 
     return 0;
