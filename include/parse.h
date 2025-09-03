@@ -13,8 +13,8 @@ struct dbheader_t {
 };
 
 struct employee_t {
-    char name[256];
-    char address[256];
+    char name[NAME_LEN];
+    char address[ADDRESS_LEN];
     unsigned int hours;
 };
 
