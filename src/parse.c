@@ -156,5 +156,33 @@ int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
         printf("\tHours: %d\n", employees[i].hours);
     }
 
-    printf("Successfully listed all databse employees");
+    printf("Successfully listed all databse employees\n");
+}
+
+int update_emp_hours(struct dbheader_t *dbhdr, struct employee_t *employee, char *update_string){
+    if (dbhdr == NULL || employee == NULL || update_string == NULL){
+        printf("Please provide valid data in order to change employee's working hours\n");
+        return -1;
+    }
+
+    char *name = strtok(update_string, ";");
+    char *address = strtok(NULL, ";");
+    char *hours = strtok(NULL, ";");
+
+    unsigned int new_hours = atoi(hours);
+
+    if (name == NULL || address == NULL || new_hours < 0){
+        printf("Invalid employee data provided\n");
+        return -1;
+    }
+
+    for (int i = 0; i < dbhdr->count; i ++){
+        if (strcmp(employee[i].name, name) == 0 && strcmp(employee[i].address, address) == 0){
+            employee[i].hours = new_hours;
+            printf("Hours updated successfully!\n");
+        } else {
+            printf("No employee found with %s name and under %s address\n", name, address);
+            return -1;
+        }
+    }
 }
