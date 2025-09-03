@@ -22,3 +22,9 @@ To delete existing file, run:
 ```
 make run ARGS="-d -f mydbfile.db"
 ```
+
+In order to add an employee, one has to provide valid string structure after -a flag, e.g.:
+```
+-a "Jan Kowalski;Warszawa;10"
+```
+Notice that delimeter is semicolon without spaces before and after it.

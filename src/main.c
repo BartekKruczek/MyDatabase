@@ -1,6 +1,7 @@
 // main pipeline executor, handles file and parser 
 #include <getopt.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "../include/file.h"
 #include "../include/parse.h"
@@ -18,7 +19,7 @@ int main(int argc, char *argv[]){
     int db_fd = -1; // -1 to avoid uninitialized warning
     char *filepath = NULL;
     char *addstring = NULL;
-    struct header_t *header = NULL;
+    struct dbheader_t *header = NULL;
     struct employee_t *employees = NULL;
     bool newfile = false;
     bool deletefile = false;
@@ -102,18 +103,22 @@ int main(int argc, char *argv[]){
         }
     }
 
-    output_to_db_file(db_fd, header);
-
     if (read_employees(db_fd, header, &employees) == -1){
         printf("Failed to read employees\n");
         return -1;
     }
 
     // add new employee to db
-    if (add_employee(header, employees, addstring) == -1){
-        printf("Failed to add an employee\n");
-        return -1;
+    if (addstring){
+
+        // increase count by 1
+        header->count++;
+        employees = realloc(employees, header->count*sizeof(struct employee_t));
+
+        add_employee(header, employees, addstring);
     }
+
+    output_file(db_fd, header, employees);
 
     return 0;
 }
