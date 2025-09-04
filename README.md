@@ -14,6 +14,7 @@ On top of that, after **make run** option, there are possible following flags:
 - `a`; append new employee to database with following syntax: *Name;Address;Hours worked*,
 - `l`; list all correctly added employees with their id, name, address and worked hours accordingly,
 - `u`; update worked hours existing employee passing following syntax: *Name;Address;New hours*,
+- `r`; remove employee with given name and address passing following syntax: *Name;Address*,
 - `h`; print help.
 
 ## Examples
@@ -28,4 +29,4 @@ To build the project, create new file, append and list employees:
 make run ARGS="-n -f mydbfile.db -a "Jan Kowalski;Warszawa;10" -l"
 ```
 
-To open and interact with exisitng database just skipp `-n` flag.
+To open and interact with exisitng database just skipp `-n` flag. To remove employee inplace `-a` with `-r` and delete hours from the string.

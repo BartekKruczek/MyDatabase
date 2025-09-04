@@ -20,18 +20,13 @@ int main(int argc, char *argv[]){
     char *filepath = NULL;
     char *addstring = NULL;
     char *updatehoursstring = NULL;
+    char *removestring = NULL;
     struct dbheader_t *header = NULL;
     struct employee_t *employees = NULL;
     bool newfile = false;
     bool list = false;
 
-    /*
-    n -> newfile name
-    f -> file path
-    d -> delete file path 
-    h -> print help
-    */
-    while ((c = getopt(argc, argv, "ndhf:a:lu:")) != -1){
+    while ((c = getopt(argc, argv, "ndhf:a:lu:r:")) != -1){
         switch (c){
             case 'n':
                 newfile = true;
@@ -47,6 +42,9 @@ int main(int argc, char *argv[]){
                 break;
             case 'u':
                 updatehoursstring = optarg;
+                break;
+            case 'r':
+                removestring = optarg;
                 break;
             case 'h':
                 print_help(argv);
@@ -108,6 +106,11 @@ int main(int argc, char *argv[]){
         employees = realloc(employees, header->count*sizeof(struct employee_t));
 
         add_employee(header, employees, addstring);
+    }
+
+    // remove existing employee
+    if (removestring){
+        remove_employee(header, &employees, removestring);
     }
 
     // update hours for existing employee

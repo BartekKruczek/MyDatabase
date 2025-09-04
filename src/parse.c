@@ -95,6 +95,36 @@ int add_employee(struct dbheader_t *header, struct employee_t *employee, char *a
     
 }
 
+int remove_employee(struct dbheader_t *header, struct employee_t **employee, char *removestring){
+    if (header == NULL || *employee == NULL || employee == NULL || removestring == NULL){
+        printf("Please provide valid data\n");
+        return -1;
+    }
+
+    char *name = strtok(removestring, ";");
+    char *address = strtok(NULL, ";");
+
+    if (name == NULL || address == NULL){
+        printf("Please provide valid name or address\n");
+        return -1;
+    }
+
+    for (int i = 0; i < header->count; i++){
+        if (strcmp((*employee)[i].name, name) == 0 && strcmp((*employee)[i].address, address) == 0){
+            // we found our employee, now we move everyone else to the left
+            if (i < header->count - 1){
+                memmove(&(*employee)[i], &(*employee)[i+1], (header->count - i - 1) * sizeof(struct employee_t));
+            }
+
+            header->count--;
+
+            *employee = realloc(*employee, sizeof(struct employee_t) * header->count);
+
+            printf("Employee %s at %s removed\n", name, address);
+        }
+    }
+}
+
 int read_employees(int fd, struct dbheader_t *header, struct employee_t **employees_out){
     if (fd < 0){
         perror("fd");
