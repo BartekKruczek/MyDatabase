@@ -100,12 +100,7 @@ int main(int argc, char *argv[]){
 
     // add new employee to db
     if (addstring){
-
-        // increase count by 1
-        header->count++;
-        employees = realloc(employees, header->count*sizeof(struct employee_t));
-
-        add_employee(header, employees, addstring);
+        add_employee(header, &employees, addstring);
     }
 
     // remove existing employee
