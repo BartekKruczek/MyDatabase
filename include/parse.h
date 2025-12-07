@@ -9,7 +9,7 @@ struct dbheader_t {
     unsigned int magic;
     unsigned short version;
     unsigned short count;
-    unsigned int file_size;
+    unsigned int filesize;
 };
 
 struct employee_t {
