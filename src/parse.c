@@ -18,7 +18,7 @@ int create_db_header(struct dbheader_t **header_out){
     header->magic = HEADER_MAGIC;
     header->version = 0x1;
     header->count = 0;
-    header->file_size = sizeof(struct dbheader_t);
+    header->filesize = sizeof(struct dbheader_t);
 
     *header_out = header;
 
@@ -48,7 +48,7 @@ int validate_db_header(int fd, struct dbheader_t **header_out){
     header->magic = ntohl(header->magic);
     header->version = ntohs(header->version);
     header->count = ntohs(header->count);
-    header->file_size = ntohl(header->file_size);
+    header->filesize = ntohl(header->filesize);
 
     if (header->magic != HEADER_MAGIC){
         printf("Invalid magic number\n");
@@ -63,7 +63,7 @@ int validate_db_header(int fd, struct dbheader_t **header_out){
     }
 
     fstat(fd, &dbstat);
-    if (header->file_size != dbstat.st_size){
+    if (header->filesize != dbstat.st_size){
         printf("Corrupted databse\n");
         free(header);
         return -1;
@@ -160,7 +160,7 @@ int output_file(int fd, struct dbheader_t *header, struct employee_t *employees)
     header->magic = htonl(header->magic);
     header->version = htons(header->version);
     header->count = htons(header->count);
-    header->file_size = htonl(sizeof(struct dbheader_t) + sizeof(struct employee_t) * realcount);
+    header->filesize = htonl(sizeof(struct dbheader_t) + sizeof(struct employee_t) * realcount);
 
     lseek(fd, 0, SEEK_SET);
 
