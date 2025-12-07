@@ -72,7 +72,7 @@ int validate_db_header(int fd, struct dbheader_t **header_out){
     *header_out = header;
 }
 
-int add_employee(struct dbheader_t *header, struct employee_t *employee, char *addstring){
+int add_employee(struct dbheader_t *header, struct employee_t **employee, char *addstring){
     if (addstring == NULL){
         printf("Please provide employee data\n");
         return -1;
@@ -87,12 +87,20 @@ int add_employee(struct dbheader_t *header, struct employee_t *employee, char *a
         return -1;
     }
 
-    strncpy(employee[header->count-1].name, name, sizeof(employee[header->count-1].name));
-    strncpy(employee[header->count-1].address, address, sizeof(employee[header->count-1].address));
+    header->count++;
 
-    employee[header->count-1].hours = atoi(hours);
-    printf("Employee added successfully\n");
-    
+    *employee = realloc(*employee, sizeof(struct employee_t) * header->count);
+    if (*employee == NULL){
+        perror("realloc");
+        return -1;
+    }
+
+    struct employee_t *new_emp = &((*employee)[header->count - 1]);
+    strncpy(new_emp->name, name, sizeof(new_emp->name) - 1);
+    strncpy(new_emp->address, address, sizeof(new_emp->address) - 1);
+    new_emp->hours = atoi(hours);
+
+    return 0;
 }
 
 int remove_employee(struct dbheader_t *header, struct employee_t **employee, char *removestring){
