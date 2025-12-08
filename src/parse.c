@@ -70,6 +70,7 @@ int validate_db_header(int fd, struct dbheader_t **header_out){
     }
 
     *header_out = header;
+    return 0;
 }
 
 int add_employee(struct dbheader_t *header, struct employee_t **employee, char *addstring){
@@ -129,8 +130,10 @@ int remove_employee(struct dbheader_t *header, struct employee_t **employee, cha
             *employee = realloc(*employee, sizeof(struct employee_t) * header->count);
 
             printf("Employee %s at %s removed\n", name, address);
+            return 0;
         }
     }
+    return 0;
 }
 
 int read_employees(int fd, struct dbheader_t *header, struct employee_t **employees_out){
@@ -155,6 +158,7 @@ int read_employees(int fd, struct dbheader_t *header, struct employee_t **employ
     }
 
     *employees_out = employees;
+    return 0;
 }
 
 int output_file(int fd, struct dbheader_t *header, struct employee_t *employees){
@@ -179,6 +183,7 @@ int output_file(int fd, struct dbheader_t *header, struct employee_t *employees)
         write(fd, &employees[i], sizeof(struct employee_t));
     }
     printf("File written successfully\n");
+    return 0;
 }
 
 int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
@@ -195,6 +200,7 @@ int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees){
     }
 
     printf("Successfully listed all databse employees\n");
+    return 0;
 }
 
 int update_emp_hours(struct dbheader_t *dbhdr, struct employee_t *employee, char *update_string){
@@ -218,6 +224,7 @@ int update_emp_hours(struct dbheader_t *dbhdr, struct employee_t *employee, char
         if (strcmp(employee[i].name, name) == 0 && strcmp(employee[i].address, address) == 0){
             employee[i].hours = new_hours;
             printf("Hours updated successfully!\n");
+            return 0;
         } else {
             printf("No employee found with %s name and under %s address\n", name, address);
             return -1;
